@@ -1,0 +1,45 @@
+[
+  {
+    "name": "get_account_info",
+    "description": "Accepts Solana publicKey address. Returns information the account data",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "Address of the Solana public key to view the information."
+        }
+      },
+      "required": ["address"]
+    }
+  },
+  {
+    "name": "get_balance",
+    "description": "Accepts Solana publicKey address. Returns the amount of SOL that the account has available.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+         "address": {
+          "type": "string",
+          "description": "Address of the Solana public key to view the information."
+        }
+      },
+      "required": ["address"]
+    }
+  },
+  {
+    "name": "get_transaction",
+    "description": "Accepts a transaction signature. Returns the publicly available transaction information and metadata. Only high level summaries based on instruction data should be provided to users unless otherwise specified. Logs, compute units, and fees are available in devMode.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "printer_name": {
+          "type": "string",
+          "description": "the name of the printer that the forecast should be sent to",
+          "enum": ["home_printer", "office_printer"]
+        }
+      },
+      "required": ["printer_name"]
+    }
+  }
+]

@@ -1,0 +1,7 @@
+langchain
+openai
+python-dotenv
+pyyaml
+aiogram
+polib
+solana

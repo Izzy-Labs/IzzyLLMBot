@@ -1,0 +1,5 @@
+msgid "start"
+msgstr "Hi, write me something."
+
+msgid "help"
+msgstr "Here's a list of available commands:\n/help - Show this help message\n/start - Start the bot"
