@@ -5,3 +5,5 @@ pyyaml
 aiogram
 polib
 solana
+solders
+pyserum

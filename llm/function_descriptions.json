@@ -28,18 +28,21 @@
     }
   },
   {
-    "name": "get_transaction",
-    "description": "Accepts a transaction signature. Returns the publicly available transaction information and metadata. Only high level summaries based on instruction data should be provided to users unless otherwise specified. Logs, compute units, and fees are available in devMode.",
+    "name": "get_pair_address",
+    "description": "Accepts two short token names. Returns a list of public addresses of token exchange pairs contracts with basic information about them. Users should only provide address, price, liquidity, volume.",
     "parameters": {
       "type": "object",
       "properties": {
-        "printer_name": {
+        "first_token": {
           "type": "string",
-          "description": "the name of the printer that the forecast should be sent to",
-          "enum": ["home_printer", "office_printer"]
+          "description": "The short name of the token that will be exchanged for the second token. Example name: Ethereum - eth; Bitcoin - btc; BinanceSmartChain - bsc."
+        },
+        "second_token": {
+          "type": "string",
+          "description": "Short name of the token for which the first token is exchanged. Example name: Ethereum - eth; Bitcoin - btc; BinanceSmartChain - bsc."
         }
       },
-      "required": ["printer_name"]
+      "required": ["first_token", "second_token"]
     }
   }
 ]

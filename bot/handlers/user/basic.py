@@ -7,4 +7,4 @@ async def start(message: types.Message) -> None:
 
 
 async def help(message: types.Message) -> None:
-    await message.answer("Here's a list of available commands:\n/help - Show this help message\n/start - Start the bot")
+    await message.answer(get_text("help", "us"))
