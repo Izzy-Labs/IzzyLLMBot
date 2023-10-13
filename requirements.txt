@@ -1,8 +1,8 @@
-langchain
-openai
-python-dotenv
+langchain==0.0.314
+openai==0.28.1
+aiogram==2.25.1
+psycopg2-binary==2.9.9
 pyyaml
-aiogram
 polib
 solana
 solders

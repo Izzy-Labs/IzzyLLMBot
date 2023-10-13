@@ -3,6 +3,7 @@ from langchain.schema import HumanMessage, AIMessage, SystemMessage, FunctionMes
 
 from llm import LLM, function_descriptions
 from bot.dispatcher import bot
+from bot.misc.utils import get_wallet_by_user_id
 from crypto import Executor
 
 
@@ -10,10 +11,18 @@ crypto = Executor("https://api.mainnet-beta.solana.com")
 
 
 async def text_handler(message: types.Message) -> None:
-    print(message.text, '\n')
+    user_wallet = get_wallet_by_user_id(message.from_user.id, message.data)
+
+    message_with_user_data = (f"username: {message.from_user.username}, "
+                              f"user id: {message.from_user.id}, "
+                              f"user`s wallet: {user_wallet}, "
+                              f"text: {message.text}")
+
+    print(message_with_user_data, '\n')
+
     first_response = LLM.predict_messages(
         messages=[
-            HumanMessage(content=message.text)
+            HumanMessage(content=message_with_user_data)
         ],
         functions=function_descriptions
     )
@@ -27,7 +36,7 @@ async def text_handler(message: types.Message) -> None:
 
         second_response = LLM.predict_messages(
             messages=[
-                HumanMessage(content=message.text),
+                HumanMessage(content=message_with_user_data),
                 AIMessage(content=str(first_response.additional_kwargs)),
                 FunctionMessage(
                     name=function_name,

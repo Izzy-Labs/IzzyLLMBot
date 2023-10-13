@@ -2,11 +2,14 @@ from aiogram.utils import executor
 from aiogram import Dispatcher
 
 from bot.dispatcher import dp
+from bot.misc.db_middleware import DatabaseMiddleware
 from bot.filters import register_all_filters
 from bot.handlers import register_all_handlers
 
 
 async def __on_start_up__(dispatcher: Dispatcher) -> None:
+    dispatcher.middleware.setup(DatabaseMiddleware())
+
     register_all_filters(dispatcher)
     register_all_handlers(dispatcher)
 
