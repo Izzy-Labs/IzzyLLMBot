@@ -1,0 +1,14 @@
+version: "3.3"
+
+services:
+
+  postgres:
+    container_name: postgres
+    image: postgres:14.5-alpine
+    restart: always
+    ports:
+      - "5433:5432"
+    env_file:
+      - ../environments/postgres.env
+    volumes:
+      - ./postgres_script:/docker-entrypoint-initdb.d/
