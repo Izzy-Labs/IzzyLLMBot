@@ -40,5 +40,4 @@ services:
             context: .
             dockerfile: docker/redis/Dockerfile
         volumes:
-#            - ./docker/redis:/usr/local/etc/redis
             - ./docker/redis/data:/data
