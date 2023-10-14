@@ -28,9 +28,8 @@ class DatabaseMiddleware(BaseMiddleware):
         :param message:
         :return:
         """
-        print(data)
         conn = self.conn_pool.getconn()
-        message.data = {'conn': conn}
+        message.pg_conn = conn
 
     async def on_post_process_message(self, message: types.Message, result, data: dict) -> None:
         """
@@ -39,6 +38,6 @@ class DatabaseMiddleware(BaseMiddleware):
         :return:
         """
 
-        conn = message.data.pop('conn', None)
+        conn = message.pg_conn
         if conn:
             self.conn_pool.putconn(conn)
