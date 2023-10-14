@@ -72,7 +72,7 @@
           "description": "The short name of the token, the amount of which is indicated in the message. Example name: Ethereum - eth; Bitcoin - btc; BinanceSmartChain - bsc."
         }
       },
-      "required": ["first_token_name", "second_token_name", "amount", "settlement_token"]
+      "required": ["user_id", "user_address","first_token_name", "second_token_name", "amount", "settlement_token"]
     }
   }
 ]

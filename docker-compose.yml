@@ -6,7 +6,7 @@ services:
         network_mode: host
         restart: always
         volumes:
-            - ./:/telegram
+            - ./telegram:/telegram
         env_file:
             - environments/telegram.env
             - environments/postgres.env

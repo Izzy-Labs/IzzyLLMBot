@@ -1,7 +1,5 @@
-from time import time
-
 from aiogram import types
-from langchain.schema import HumanMessage, AIMessage, SystemMessage, FunctionMessage
+from langchain.schema import HumanMessage, AIMessage, FunctionMessage
 
 from llm import LLM, function_descriptions
 from bot.dispatcher import bot
