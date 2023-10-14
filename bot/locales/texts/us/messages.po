@@ -3,3 +3,6 @@ msgstr "Hi, write me something."
 
 msgid "help"
 msgstr "Here's a list of available commands:\n/help - Show this help message\n/start - Start the bot"
+
+msgid "confirm swap"
+msgstr "Do you want to exchange {token_amount_1} {token_name_1} to {token_amount_2} {token_name_2}?"
