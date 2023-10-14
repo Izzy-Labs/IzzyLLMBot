@@ -10,11 +10,13 @@ services:
         env_file:
             - environments/telegram.env
             - environments/postgres.env
+            - environments/redis.env
         build:
             context: ./
             dockerfile: docker/telegram/Dockerfile
         depends_on:
             - postgres
+            - redis
 
     postgres:
         container_name: ai_bot_postgres
@@ -26,3 +28,17 @@ services:
             - environments/postgres.env
         volumes:
             - ./docker/postgres/script:/docker-entrypoint-initdb.d/
+
+    redis:
+        container_name: ai_bot_redis
+        restart: always
+        ports:
+            - "6379:6379"
+        env_file:
+            - environments/redis.env
+        build:
+            context: .
+            dockerfile: docker/redis/Dockerfile
+        volumes:
+#            - ./docker/redis:/usr/local/etc/redis
+            - ./docker/redis/data:/data
