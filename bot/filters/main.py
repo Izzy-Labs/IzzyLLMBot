@@ -1,6 +1,8 @@
 from aiogram import Dispatcher
 
+from .transaction_buttons import TxConfirmFilter, TxRejectFilter
+
 
 def register_all_filters(dp: Dispatcher):
-    # todo: register all filters - dp.bind_filter()
-    pass
+    dp.filters_factory.bind(TxConfirmFilter)
+    dp.filters_factory.bind(TxRejectFilter)
