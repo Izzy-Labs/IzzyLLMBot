@@ -1,7 +1,21 @@
 [
   {
+    "name": "get_connected_wallet",
+    "description": "Accepts Solana publicKey address. The address can be None. Returns the Solana publicKey address that was connected as user`s wallet.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+         "address": {
+          "type": "string",
+          "description": "Address of the Solana public key to view the information."
+        }
+      },
+      "required": ["address"]
+    }
+  },
+  {
     "name": "get_account_info",
-    "description": "Accepts Solana publicKey address. Returns information the account data",
+    "description": "Accepts Solana publicKey address. The address can be None. Returns information the account data",
     "parameters": {
       "type": "object",
       "properties": {
@@ -15,7 +29,7 @@
   },
   {
     "name": "get_balance",
-    "description": "Accepts Solana publicKey address. Returns the amount of SOL that the account has available.",
+    "description": "Accepts Solana publicKey address. The address can be None. Returns the amount of SOL that the account has available.",
     "parameters": {
       "type": "object",
       "properties": {
@@ -28,21 +42,37 @@
     }
   },
   {
-    "name": "get_pair_address",
-    "description": "Accepts two short token names. Returns a list of public addresses of token exchange pairs contracts with basic information about them. Users should only provide address, price, liquidity, volume.",
+    "name": "swap",
+    "description": "A function that exchanges 1 token for another in the specified amount. Takes the short names of two tokens, the amount to exchange and the name of the token whose amount is specified. Returns the transaction hash of the executed transaction. Example of defining arguments: 'Exchange sol for 10 usdc' -> (sol, usdc, 10, usdc).",
     "parameters": {
       "type": "object",
       "properties": {
-        "first_token": {
+        "user_id": {
+          "type": "number",
+          "description": "User ID."
+        },
+        "user_address": {
+          "type": "string",
+          "description": "User's Solana wallet address."
+        },
+        "first_token_name": {
           "type": "string",
           "description": "The short name of the token that will be exchanged for the second token. Example name: Ethereum - eth; Bitcoin - btc; BinanceSmartChain - bsc."
         },
-        "second_token": {
+        "second_token_name": {
           "type": "string",
           "description": "Short name of the token for which the first token is exchanged. Example name: Ethereum - eth; Bitcoin - btc; BinanceSmartChain - bsc."
+        },
+        "amount": {
+          "type": "number",
+          "description": "The number of settlement tokens that will be exchanged for another token."
+        },
+        "settlement_token": {
+          "type": "string",
+          "description": "The short name of the token, the amount of which is indicated in the message. Example name: Ethereum - eth; Bitcoin - btc; BinanceSmartChain - bsc."
         }
       },
-      "required": ["first_token", "second_token"]
+      "required": ["first_token_name", "second_token_name", "amount", "settlement_token"]
     }
   }
 ]
