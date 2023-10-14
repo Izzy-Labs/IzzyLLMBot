@@ -1,7 +1,7 @@
 from aiogram import Dispatcher
 
 from .basic import start, help
-from .llm import text_handler
+from .text_handler import text_handler
 
 
 def register_user_handlers(dp: Dispatcher):

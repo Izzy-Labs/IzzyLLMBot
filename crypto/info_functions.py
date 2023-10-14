@@ -6,7 +6,7 @@ from solders.pubkey import Pubkey
 from bot.misc.utils import check_wallet_address
 
 
-class AccountInfo:
+class Info:
     rpc_client: AsyncClient
 
     async def get_account_info(self, address: Union[str, None]) -> [str, str]:

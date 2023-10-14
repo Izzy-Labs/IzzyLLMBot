@@ -1,16 +1,35 @@
 import json
 
 from typing import Any
+from aiogram import Bot
+from psycopg2 import connect
+from aioredis import Redis
 from solana.rpc.async_api import AsyncClient
 
-from .account_info import AccountInfo
+from .info_functions import Info
+from .tx_functions import Transactions
 
 
-class Executor(AccountInfo):
-    def __init__(self, rpc_url: str):
-        self.client = AsyncClient(rpc_url)
+class Executor(Info, Transactions):
+    def __init__(
+            self,
+            rpc_url: str,
+            bot_client: Bot,
+            pg_conn: connect,
+            redis_conn: Redis
+    ):
+        self.rpc_client = AsyncClient(rpc_url)
+        self.bot_client = bot_client
+        self.pg_conn = pg_conn
+        self.redis_conn = redis_conn
 
-    async def function_call(self, call_data: dict) -> Any:
+    async def function_call(self, call_data: dict) -> [str, Any]:
+        """
+        Call function by name
+        :param call_data:
+        :return: type of function, result
+        """
+
         if 'name' in call_data:
             func = self.__getattribute__(call_data['name'])
 
