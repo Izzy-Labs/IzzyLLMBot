@@ -19,3 +19,8 @@ class RedisEnv:
     DB: int = int(environ.get("REDIS_DB", "define me"))
     USER: str = environ.get("REDIS_USER", "define me")
     PASSWORD: str | None = environ.get("REDIS_PASSWORD", None)
+
+
+class SolanaEnv:
+    PRIVATE_KEY: str = environ.get("PRIVATE_KEY", "define me")
+    RPC_URL: str = environ.get("RPC_URL", "define me")
