@@ -2,7 +2,7 @@ from aiogram import Dispatcher
 
 from .basic import start, help
 from .text_handler import text_handler
-from .exec_transaction import tx_reject, tx_confirm
+from .processing_transactions import tx_reject, tx_confirm
 
 
 def register_user_handlers(dp: Dispatcher):

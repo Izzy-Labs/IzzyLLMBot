@@ -1,6 +1,7 @@
 import json
 import random
 
+from typing import List
 from aiogram import Bot
 from psycopg2 import connect
 from aioredis import Redis
@@ -9,6 +10,8 @@ from solana.rpc.async_api import AsyncClient
 from bot.misc.utils import get_token_address
 from bot.locales import get_text
 from bot import keyboards
+from llm import chat_to_json
+from llm.types import Message
 
 
 class Transactions:
@@ -40,9 +43,11 @@ class Transactions:
             second_token_name: str,
             amount: float,
             settlement_token: str,
+            messages: List[Message] = None
     ) -> [str, str]:
         """
         Swap tokens.
+        :param messages:
         :param user_id: int
         :param user_address: str
         :param first_token_name: str
@@ -52,8 +57,11 @@ class Transactions:
         :return: type of function, transaction arguments
         """
 
-        first_token_address = get_token_address(first_token_name)
-        second_token_address = get_token_address(second_token_name)
+        try:
+            first_token_address = get_token_address(first_token_name)
+            second_token_address = get_token_address(second_token_name)
+        except ValueError:
+            return 'error', 'Wrong token name!'
 
         if settlement_token == first_token_name:
             first_token_amount = amount
@@ -73,7 +81,8 @@ class Transactions:
                 'first_token_amount': first_token_amount,
                 'second_token_address': second_token_address,
                 'second_token_amount': second_token_amount,
-            }
+            },
+            'messages': chat_to_json(messages)
         }
 
         task_id = await self._generate_random_task_id(user_id)
@@ -95,4 +104,4 @@ class Transactions:
             reply_markup=keyboard
         )
 
-        return 'transaction', tx_data
+        return 'transaction', {'task_id': task_id}

@@ -31,12 +31,18 @@ async def text_handler(message: types.Message) -> None:
         functions=function_descriptions
     )
 
+    print(first_response)
+
     if first_response.additional_kwargs.get('function_call'):
-        function_type, function_result = await executor.function_call(
-            first_response.additional_kwargs['function_call'],
-        )
-        print(function_result, '\n')
         function_name = first_response.additional_kwargs['function_call']['name']
+
+        function_type, function_result = await executor.function_call(
+            call_data=first_response.additional_kwargs['function_call'],
+            messages=[
+                HumanMessage(content=message_with_user_data),
+                AIMessage(content=str(first_response.additional_kwargs))
+            ]
+        )
 
         if function_type == 'info':
             second_response = LLM.predict_messages(
