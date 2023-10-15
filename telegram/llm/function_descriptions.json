@@ -57,7 +57,7 @@
         },
         "first_token_name": {
           "type": "string",
-          "description": "The short name of the token that will be exchanged for the second token. Example name: Ethereum - eth; Bitcoin - btc; BinanceSmartChain - bsc."
+          "description": "The short name of the token that will be exchanged for the second token. Example name: Bitcoin - btc; BinanceSmartChain - bsc."
         },
         "second_token_name": {
           "type": "string",
@@ -69,7 +69,7 @@
         },
         "settlement_token": {
           "type": "string",
-          "description": "The short name of the token, the amount of which is indicated in the message. Example name: Ethereum - eth; Bitcoin - btc; BinanceSmartChain - bsc."
+          "description": "The short name of the token, the amount of which is indicated in the message. Most often, if the name of the token is preceded by a number, then it is a settlement_token. Example: btc to 10 eth -> eth."
         }
       },
       "required": ["user_id", "user_address","first_token_name", "second_token_name", "amount", "settlement_token"]
