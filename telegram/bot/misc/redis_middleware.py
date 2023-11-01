@@ -21,7 +21,7 @@ class RedisMiddleware(BaseMiddleware):
         :param data:
         :return:
         """
-        message.redis = self.redis
+        data['redis'] = self.redis
 
     async def on_pre_process_callback_query(self, callback_query, data: dict) -> None:
         """
@@ -30,4 +30,4 @@ class RedisMiddleware(BaseMiddleware):
         :param data:
         :return:
         """
-        callback_query.redis = self.redis
+        data['redis'] = self.redis

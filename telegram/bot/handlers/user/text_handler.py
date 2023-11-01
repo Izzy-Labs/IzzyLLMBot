@@ -7,15 +7,18 @@ from bot.misc.utils import get_wallet_by_user_id
 from crypto import Executor
 
 
-async def text_handler(message: types.Message) -> None:
+async def text_handler(message: types.Message, **kwargs) -> None:
+    pg_conn = kwargs['pg_conn']
+    redis_conn = kwargs['redis']
+
     executor = Executor(
         rpc_url="https://api.mainnet-beta.solana.com",
         bot_client=bot,
-        pg_conn=message.pg_conn,
-        redis_conn=message.redis,
+        pg_conn=pg_conn,
+        redis_conn=redis_conn,
     )
 
-    user_wallet = get_wallet_by_user_id(message.from_user.id, message.pg_conn)
+    user_wallet = get_wallet_by_user_id(message.from_user.id, pg_conn)
 
     message_with_user_data = (f"username: {message.from_user.username}, "
                               f"user id: {message.from_user.id}, "
@@ -60,4 +63,3 @@ async def text_handler(message: types.Message) -> None:
             await bot.send_message(chat_id=message.from_user.id, text=second_response.content)
     else:
         await bot.send_message(chat_id=message.from_user.id, text=message.text)
-

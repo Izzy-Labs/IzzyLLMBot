@@ -9,19 +9,20 @@ from llm import LLM, function_descriptions, json_to_chat
 from crypto.execute_transaction import Transactions
 
 
-async def tx_reject(query: types.CallbackQuery) -> None:
+async def tx_reject(query: types.CallbackQuery, **kwargs) -> None:
     """
     Reject transaction
     :param query:
+    :param kwargs:
     :return:
     """
 
     task_id = query.data.split('/')[1]
     chat_id = query.message.chat.id
-    redis: Redis = query.redis
+    redis_conn = kwargs['redis']
 
-    byte_data = await redis.hget('tasks', task_id)
-    await redis.hdel('tasks', task_id)
+    byte_data = await redis_conn.hget('tasks', task_id)
+    await redis_conn.hdel('tasks', task_id)
 
     if not byte_data:
         await bot.send_message(chat_id, 'Transaction already rejected or executed!')
@@ -40,25 +41,23 @@ async def tx_reject(query: types.CallbackQuery) -> None:
     await bot.send_message(chat_id, second_response.content)
 
 
-async def tx_confirm(query: types.CallbackQuery) -> None:
+async def tx_confirm(query: types.CallbackQuery, **kwargs) -> None:
     """
     Confirm transaction
     :param query:
+    :param kwargs:
     :return:
     """
 
     task_id = query.data.split('/')[1]
     chat_id = query.message.chat.id
-    redis: Redis = query.redis
+    redis_conn = kwargs['redis']
 
-    byte_data = await redis.hget('tasks', task_id)
-    await redis.hdel('tasks', task_id)
+    byte_data = await redis_conn.hget('tasks', task_id)
+    await redis_conn.hdel('tasks', task_id)
 
     if not byte_data:
-        await bot.send_message(
-            chat_id,
-            'Transaction already rejected or executed!'
-        )
+        await bot.send_message(chat_id, 'Transaction already rejected or executed!')
         return
 
     data = json.loads(byte_data)

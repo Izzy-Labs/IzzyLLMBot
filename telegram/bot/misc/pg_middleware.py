@@ -30,7 +30,7 @@ class DatabaseMiddleware(BaseMiddleware):
         :return:
         """
         conn = self.conn_pool.getconn()
-        message.pg_conn = conn
+        data['pg_conn'] = conn
 
     async def on_post_process_message(self, message: types.Message, result, data: dict) -> None:
         """
@@ -40,7 +40,7 @@ class DatabaseMiddleware(BaseMiddleware):
         :param message:
         :return:
         """
-        conn = message.pg_conn
+        conn = data['pg_conn']
         self.conn_pool.putconn(conn)
 
     async def on_pre_process_callback_query(self, callback_query: types.CallbackQuery, data: dict) -> None:
@@ -51,7 +51,7 @@ class DatabaseMiddleware(BaseMiddleware):
         :return:
         """
         conn = self.conn_pool.getconn()
-        callback_query.pg_conn = conn
+        data['pg_conn'] = conn
 
     async def on_post_process_callback_query(self, callback_query: types.CallbackQuery, result, data: dict) -> None:
         """
@@ -61,5 +61,5 @@ class DatabaseMiddleware(BaseMiddleware):
         :param callback_query:
         :return:
         """
-        conn = callback_query.pg_conn
+        conn = data['pg_conn']
         self.conn_pool.putconn(conn)
