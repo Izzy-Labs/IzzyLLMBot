@@ -11,7 +11,7 @@ from bot.misc.utils import get_token_address
 from bot.locales import get_text
 from bot import keyboards
 from llm import chat_to_json
-from llm.types import Message
+from llm.types import LLM_Message
 
 
 class Transactions:
@@ -43,7 +43,7 @@ class Transactions:
             second_token_name: str,
             amount: float,
             settlement_token: str,
-            messages: List[Message] = None
+            messages: List[LLM_Message] = None
     ) -> [str, str]:
         """
         Swap tokens.

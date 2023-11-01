@@ -4,10 +4,10 @@ from typing import List
 
 from langchain.schema import HumanMessage, AIMessage, FunctionMessage
 
-from .types import Message     # see telegram/llm/_types.py
+from .types import LLM_Message     # see telegram/llm/_types.py
 
 
-def chat_to_json(messages: List[Message]) -> str:
+def chat_to_json(messages: List[LLM_Message]) -> str:
     messages_to_json = []
     if messages:
         for message in messages:
@@ -21,7 +21,7 @@ def chat_to_json(messages: List[Message]) -> str:
     return json.dumps(messages_to_json)
 
 
-def json_to_chat(json_str: str) -> List[Message]:
+def json_to_chat(json_str: str) -> List[LLM_Message]:
     messages = json.loads(json_str)
     messages_to_return = []
 

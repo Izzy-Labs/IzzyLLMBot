@@ -8,7 +8,7 @@ from solana.rpc.async_api import AsyncClient
 
 from .info_functions import Info
 from .tx_functions import Transactions
-from llm.types import Message
+from llm.types import LLM_Message
 
 
 class Executor(Info, Transactions):
@@ -24,7 +24,7 @@ class Executor(Info, Transactions):
         self.pg_conn = pg_conn
         self.redis_conn = redis_conn
 
-    async def function_call(self, call_data: dict, messages: List[Message]) -> [str, Any]:
+    async def function_call(self, call_data: dict, messages: List[LLM_Message]) -> [str, Any]:
         """
         Call function by name
         :param messages:

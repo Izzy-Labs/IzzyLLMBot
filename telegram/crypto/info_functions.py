@@ -4,13 +4,13 @@ from solana.rpc.async_api import AsyncClient
 from solders.pubkey import Pubkey
 
 from bot.misc.utils import check_wallet_address
-from llm.types import Message
+from llm.types import LLM_Message
 
 
 class Info:
     rpc_client: AsyncClient
 
-    async def get_account_info(self, address: Union[str, None], messages: List[Message] = None) -> [str, str]:
+    async def get_account_info(self, address: Union[str, None], messages: List[LLM_Message] = None) -> [str, str]:
         """
         Get account info by address
         :param messages:
@@ -28,7 +28,7 @@ class Info:
 
         return 'info', response.value
 
-    async def get_balance(self, address: str, messages: List[Message] = None) -> [str, str]:
+    async def get_balance(self, address: str, messages: List[LLM_Message] = None) -> [str, str]:
         """
         Get balance by address
         :param messages:
@@ -48,7 +48,7 @@ class Info:
         return 'info', result
 
     @staticmethod
-    async def get_connected_wallet(address: str, messages: List[Message] = None) -> [str, str]:
+    async def get_connected_wallet(address: str, messages: List[LLM_Message] = None) -> [str, str]:
         """
         Get connected wallet
         :param messages:
