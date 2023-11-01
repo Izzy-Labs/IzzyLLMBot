@@ -9,10 +9,9 @@ class Transactions:
         return await func(*args, **kwargs)
 
     async def swap(self, *args, **kwargs) -> str:
-        print(f'swap: {args}, {kwargs}')
         resp = json.dumps({
-            'result': 'ok',
-            'tx_id': '2PStA6wUbyH5RFNz9aV3aWxL21GgSCnL4BgM32ka8x3QntuQiVr5hjaTd7CsTcNGzJK6wgaPrPPidzwvaNgysQ2V'
+            'result': 'success',
+            'tx_id': 'cVf2EoqGw6Fda8Ztjeazx1GAKHu1NQJVtJ1J28Ek8F2BJESHDdMG1WbzvjJfuzKG2ifrXmGR4uzNc1855kdGJKY '
         })
 
         return resp

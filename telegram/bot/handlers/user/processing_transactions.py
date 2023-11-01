@@ -1,11 +1,11 @@
-import json
-
 from aiogram import types
-from aioredis import Redis
-from langchain.schema import HumanMessage, AIMessage, FunctionMessage
+from langchain.schema import HumanMessage, FunctionMessage
 
 from bot.dispatcher import bot
+from bot.misc.utils import get_task_id_from_query, get_tx_data_by_task_id
+from bot.misc.exceptions import RedisTaskNotFoundException
 from llm import LLM, function_descriptions, json_to_chat
+from llm.corrective_message import success_transaction
 from crypto.execute_transaction import Transactions
 
 
@@ -17,18 +17,15 @@ async def tx_reject(query: types.CallbackQuery, **kwargs) -> None:
     :return:
     """
 
-    task_id = query.data.split('/')[1]
     chat_id = query.message.chat.id
-    redis_conn = kwargs['redis']
+    task_id = get_task_id_from_query(query)
 
-    byte_data = await redis_conn.hget('tasks', task_id)
-    await redis_conn.hdel('tasks', task_id)
-
-    if not byte_data:
+    try:
+        data = await get_tx_data_by_task_id(task_id, kwargs['redis'])
+    except RedisTaskNotFoundException:
         await bot.send_message(chat_id, 'Transaction already rejected or executed!')
         return
 
-    data = json.loads(byte_data)
     messages = json_to_chat(data['messages'])
 
     second_response = LLM.predict_messages(
@@ -38,6 +35,7 @@ async def tx_reject(query: types.CallbackQuery, **kwargs) -> None:
         ],
         functions=function_descriptions
     )
+
     await bot.send_message(chat_id, second_response.content)
 
 
@@ -49,18 +47,14 @@ async def tx_confirm(query: types.CallbackQuery, **kwargs) -> None:
     :return:
     """
 
-    task_id = query.data.split('/')[1]
     chat_id = query.message.chat.id
-    redis_conn = kwargs['redis']
+    task_id = get_task_id_from_query(query)
 
-    byte_data = await redis_conn.hget('tasks', task_id)
-    await redis_conn.hdel('tasks', task_id)
-
-    if not byte_data:
+    try:
+        data = await get_tx_data_by_task_id(task_id, kwargs['redis'])
+    except RedisTaskNotFoundException:
         await bot.send_message(chat_id, 'Transaction already rejected or executed!')
         return
-
-    data = json.loads(byte_data)
 
     func = data.get('function')
     params = data.get('params')
@@ -72,8 +66,6 @@ async def tx_confirm(query: types.CallbackQuery, **kwargs) -> None:
     except Exception as error:
         res = f'Error: {error}'
 
-    fix_message = "If the transaction is successful, report it and format the transaction ID as follows: '[tx_id](https://solanabeach.io/transaction/{tx_id})'"
-
     second_response = LLM.predict_messages(
         messages=[
             *messages,
@@ -81,7 +73,7 @@ async def tx_confirm(query: types.CallbackQuery, **kwargs) -> None:
                 name=func,
                 content=res
             ),
-            HumanMessage(content=fix_message)
+            HumanMessage(content=success_transaction)
         ],
         functions=function_descriptions
     )
