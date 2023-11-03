@@ -4,14 +4,11 @@ from aiogram import Dispatcher
 from bot.dispatcher import dp
 from bot.filters import register_all_filters
 from bot.handlers import register_all_handlers
-from bot.middlewares.pg import DatabaseMiddleware
-from bot.middlewares.redis import RedisMiddleware
+from bot.middlewares import register_all_middlewares
 
 
 async def __on_start_up__(dispatcher: Dispatcher) -> None:
-    dispatcher.middleware.setup(DatabaseMiddleware())
-    dispatcher.middleware.setup(RedisMiddleware())
-
+    register_all_middlewares(dispatcher)
     register_all_filters(dispatcher)
     register_all_handlers(dispatcher)
 
