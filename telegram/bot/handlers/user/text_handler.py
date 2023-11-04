@@ -10,6 +10,7 @@ from crypto import Executor
 async def text_handler(message: types.Message, **kwargs) -> None:
     pg_conn = kwargs['pg_conn']
     redis_conn = kwargs['redis']
+    waiting_message_id = kwargs['message_id']
 
     executor = Executor(
         rpc_url="https://api.mainnet-beta.solana.com",
@@ -22,6 +23,7 @@ async def text_handler(message: types.Message, **kwargs) -> None:
 
     message_with_user_data = (f"username: {message.from_user.username}, "
                               f"user id: {message.from_user.id}, "
+                              f"waiting message id: {waiting_message_id},"
                               f"user`s wallet address: {user_wallet}, "
                               f"text: {message.text}")
 
@@ -60,6 +62,15 @@ async def text_handler(message: types.Message, **kwargs) -> None:
                 functions=function_descriptions
             )
             print(second_response)
-            await bot.send_message(chat_id=message.from_user.id, text=second_response.content)
+
+            await bot.edit_message_text(
+                text=second_response.content,
+                chat_id=message.from_user.id,
+                message_id=waiting_message_id
+            )
     else:
-        await bot.send_message(chat_id=message.from_user.id, text=message.text)
+        await bot.edit_message_text(
+            text=message.text,
+            chat_id=message.from_user.id,
+            message_id=waiting_message_id
+        )

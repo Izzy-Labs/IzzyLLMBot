@@ -6,3 +6,6 @@ msgstr "Ось список доступних команд:\n/help - Відоб
 
 msgid "confirm swap"
 msgstr "Чи хочете ви обміняти {token_amount_1} {token_name_1} на {token_amount_2} {token_name_2}?"
+
+msgid "waiting for bot answer"
+msgstr "Будьласка, зачекайте, Я обробляю ваш запит"

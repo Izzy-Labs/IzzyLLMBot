@@ -6,3 +6,6 @@ msgstr "Here's a list of available commands:\n/help - Show this help message\n/s
 
 msgid "confirm swap"
 msgstr "Do you want to exchange {token_amount_1} {token_name_1} to {token_amount_2} {token_name_2}?"
+
+msgid "waiting for bot answer"
+msgstr "Please wait. I analyze the text"

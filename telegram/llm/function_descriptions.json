@@ -55,6 +55,10 @@
           "type": "string",
           "description": "User's Solana wallet address."
         },
+        "waiting_message_id":  {
+          "type": "number",
+          "description": "The ID of the message that notified the user of the wait."
+        },
         "first_token_name": {
           "type": "string",
           "description": "The short name of the token that will be exchanged for the second token. Example name: Bitcoin - btc; BinanceSmartChain - bsc."

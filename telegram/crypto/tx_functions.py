@@ -39,6 +39,7 @@ class Transactions:
             self,
             user_id: int,
             user_address: str,
+            waiting_message_id: int,
             first_token_name: str,
             second_token_name: str,
             amount: float,
@@ -47,13 +48,14 @@ class Transactions:
     ) -> [str, str]:
         """
         Swap tokens.
-        :param messages:
         :param user_id: int
         :param user_address: str
+        :param waiting_message_id: int
         :param first_token_name: str
         :param second_token_name: str
         :param amount: float
         :param settlement_token: str
+        :param messages:
         :return: type of function, transaction arguments
         """
 
@@ -98,9 +100,10 @@ class Transactions:
             token_name_2=second_token_name,
         )
 
-        await self.bot_client.send_message(
-            chat_id=user_id,
+        await self.bot_client.edit_message_text(
             text=message,
+            chat_id=user_id,
+            message_id=waiting_message_id,
             reply_markup=keyboard
         )
 
