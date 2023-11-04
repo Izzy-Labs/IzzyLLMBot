@@ -7,7 +7,7 @@ from psycopg2 import connect
 from aioredis import Redis
 from solana.rpc.async_api import AsyncClient
 
-from bot.misc.utils import get_token_address
+from bot.misc.utils import get_token_address, get_quote_token_price
 from bot.locales import get_text
 from bot import keyboards
 from llm import chat_to_json
@@ -66,13 +66,29 @@ class Transactions:
             return 'error', 'Wrong token name!'
 
         if settlement_token == first_token_name:
+            second_token_price = get_quote_token_price(
+                from_token_name=first_token_name,
+                to_token_name=second_token_name
+            )
+
             first_token_amount = amount
             second_token_amount = 0
+
+            preview_first_token_amount = amount
+            preview_second_token_amount = round(amount * second_token_price, 4)
         elif settlement_token == second_token_name:
+            first_token_price = get_quote_token_price(
+                from_token_name=second_token_name,
+                to_token_name=first_token_name
+            )
+
             first_token_amount = 0
             second_token_amount = amount
+
+            preview_first_token_amount = amount * first_token_price
+            preview_second_token_amount = amount
         else:
-            raise ValueError('Wrong settlement token address!')
+            raise ValueError('Wrong settlement token name!')
 
         tx_data = {
             'function': 'swap',
@@ -94,9 +110,9 @@ class Transactions:
         message = get_text(
             msgid='confirm swap',
             language='us',
-            token_amount_1='X' if first_token_amount == 0 else first_token_amount,
+            token_amount_1=preview_first_token_amount,
             token_name_1=first_token_name,
-            token_amount_2='X' if second_token_amount == 0 else second_token_amount,
+            token_amount_2=preview_second_token_amount,
             token_name_2=second_token_name,
         )
 

@@ -68,6 +68,12 @@ async def text_handler(message: types.Message, **kwargs) -> None:
                 chat_id=message.from_user.id,
                 message_id=waiting_message_id
             )
+        elif function_type == 'error':
+            await bot.edit_message_text(
+                text=function_result,
+                chat_id=message.from_user.id,
+                message_id=waiting_message_id
+            )
     else:
         await bot.edit_message_text(
             text=message.text,

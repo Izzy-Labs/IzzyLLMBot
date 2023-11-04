@@ -1,11 +1,16 @@
 import json
+import asyncio
 import requests
 
+from aiogram import types
 from aioredis import Redis
 from psycopg2 import connect
 from solders.pubkey import Pubkey
 
 from .exceptions import RedisTaskNotFoundException
+
+
+DEXSCREENER_LINK = 'https://api.dexscreener.com/latest/dex/search?q='
 
 
 def get_wallet_by_user_id(user_id: int, pg_conn: connect) -> str:
@@ -36,17 +41,40 @@ def check_wallet_address(address: str) -> None:
 
 
 def get_token_address(token_name: str) -> str:
-    base_link = 'https://api.dexscreener.com/latest/dex/search?q='
+    token_name = token_name.upper()
 
     response = requests.get(
-        base_link + token_name,
+        DEXSCREENER_LINK + token_name,
     ).json()
 
     for pair in response['pairs']:
         if pair['chainId'] == 'solana':
+            if (pair['baseToken']['symbol'] == token_name or
+                    pair['quoteToken']['symbol'] == token_name):
+                return pair['baseToken']['address']
             return pair['quoteToken']['address']
 
     raise ValueError(f'token {token_name} not found')
+
+
+def get_quote_token_price(
+        from_token_name: str,
+        to_token_name: str,
+) -> float:
+    from_token_name = from_token_name.upper()
+    to_token_name = to_token_name.upper()
+
+    link = f"{DEXSCREENER_LINK}{from_token_name}%20{to_token_name}"
+    response = requests.get(link).json()
+
+    for pair in response['pairs']:
+        if pair['chainId'] == 'solana':
+            if pair['baseToken']['symbol'] == from_token_name:
+                return float(pair['priceNative'])
+            elif pair['quoteToken']['symbol'] == from_token_name:
+                return 1 / float(pair['priceNative'])
+
+    return None
 
 
 def get_task_id_from_query(query) -> str:
